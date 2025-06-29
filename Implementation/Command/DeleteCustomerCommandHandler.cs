@@ -1,4 +1,4 @@
-﻿using cqrs_example.Commands;
+﻿using cqrs_example.Cqrs;
 using MediatR;
 
 namespace cqrs_example.Handlers;

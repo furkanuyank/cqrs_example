@@ -1,6 +1,6 @@
-﻿using cqrs_example.Commands;
+﻿using cqrs_example.Cqrs;
+using cqrs_example.Entity;
 using cqrs_example.FakeDB;
-using cqrs_example.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

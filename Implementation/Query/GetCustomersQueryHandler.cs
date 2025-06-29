@@ -1,14 +1,15 @@
-﻿using cqrs_example.FakeDB;
-using cqrs_example.Queries;
+﻿using cqrs_example.Cqrs;
+using cqrs_example.Entity;
+using cqrs_example.FakeDB;
 using MediatR;
 
 namespace cqrs_example.Handlers;
 
-public class GetCustomersHandler : IRequestHandler<GetCustomersQuery, IEnumerable<Customer>>
+public class GetCustomersQueryHandler : IRequestHandler<GetCustomersQuery, IEnumerable<Customer>>
 {
     private readonly FakeDB.FakeDB _fakeDB;
 
-    public GetCustomersHandler(FakeDB.FakeDB fakeDB)
+    public GetCustomersQueryHandler(FakeDB.FakeDB fakeDB)
     {
         _fakeDB = fakeDB;
     }

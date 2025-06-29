@@ -1,14 +1,14 @@
-﻿using cqrs_example.Commands;
-using cqrs_example.FakeDB;
+﻿using cqrs_example.Cqrs;
+using cqrs_example.Entity;
 using MediatR;
 
 namespace cqrs_example.Handlers;
 
-public class AddCustomerHandler : IRequestHandler<AddCustomerCommand, Customer>
+public class AddCustomerCommandHandler : IRequestHandler<AddCustomerCommand, Customer>
 {
     private readonly FakeDB.FakeDB _fakeDB;
 
-    public AddCustomerHandler(FakeDB.FakeDB fakeDB)
+    public AddCustomerCommandHandler(FakeDB.FakeDB fakeDB)
     {
         _fakeDB = fakeDB;
     }

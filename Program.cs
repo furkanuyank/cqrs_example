@@ -9,9 +9,9 @@ builder.Services.AddSingleton<FakeDB>();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-}
+// if (app.Environment.IsDevelopment())
+// {
+// }
 
 app.UseHttpsRedirection();
 

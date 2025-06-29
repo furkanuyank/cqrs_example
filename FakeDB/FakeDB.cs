@@ -1,4 +1,5 @@
-﻿namespace cqrs_example.FakeDB;
+﻿using cqrs_example.Entity;
+namespace cqrs_example.FakeDB;
 
 public class FakeDB
 {
