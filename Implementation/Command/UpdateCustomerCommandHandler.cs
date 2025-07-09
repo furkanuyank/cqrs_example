@@ -1,21 +1,33 @@
-﻿using cqrs_example.Cqrs;
+﻿using AutoMapper;
+using cqrs_example.Cqrs;
+using cqrs_example.Domain.OutputDTO;
 using cqrs_example.Entity;
-using cqrs_example.FakeDB;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace cqrs_example.Handlers;
 
-public class UpdateCustomerCommandHandler : IRequestHandler<UpdateCustomerCommand, Customer>
+public class UpdateCustomerCommandHandler : IRequestHandler<UpdateCustomerCommand, CustomerOutputDTO>
 {
-    private readonly FakeDB.FakeDB _fakeDb;
+    private readonly AppDbContext _dbContext;
+    private readonly IMapper _mapper;
 
-    public UpdateCustomerCommandHandler(FakeDB.FakeDB fakeDb)
+    public UpdateCustomerCommandHandler(AppDbContext dbContext, IMapper mapper)
     {
-        _fakeDb = fakeDb;
+        _dbContext = dbContext;
+        _mapper = mapper;
     }
 
-    public async Task<Customer> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
+    public async Task<CustomerOutputDTO> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
     {
-        return await _fakeDb.UpdateCustomerAsync(request.customer);
+        try
+        {
+            //TODO: implement update
+            return null;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 }

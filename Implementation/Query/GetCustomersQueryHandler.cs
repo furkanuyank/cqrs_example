@@ -1,21 +1,42 @@
-﻿using cqrs_example.Cqrs;
+﻿using System.Security.AccessControl;
+using AutoMapper;
+using cqrs_example.Cqrs;
+using cqrs_example.Domain.OutputDTO;
 using cqrs_example.Entity;
-using cqrs_example.FakeDB;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace cqrs_example.Handlers;
 
-public class GetCustomersQueryHandler : IRequestHandler<GetCustomersQuery, IEnumerable<Customer>>
+public class GetCustomersQueryHandler : IRequestHandler<GetCustomersQuery, IEnumerable<CustomerOutputDTO>>
 {
-    private readonly FakeDB.FakeDB _fakeDB;
+    private readonly AppDbContext _dbContext;
+    private readonly IMapper _mapper;
 
-    public GetCustomersQueryHandler(FakeDB.FakeDB fakeDB)
+    public GetCustomersQueryHandler(AppDbContext dbContext, IMapper mapper)
     {
-        _fakeDB = fakeDB;
+        _dbContext = dbContext;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<Customer>> Handle(GetCustomersQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<CustomerOutputDTO>> Handle(GetCustomersQuery request,
+        CancellationToken cancellationToken)
     {
-        return await _fakeDB.GetAllCustomersAsync();
+        try
+        {
+            var customers = await _dbContext.Customers.Include(c => c.CustomerMails).ToListAsync(cancellationToken);
+            var customerOutputDTOs = new List<CustomerOutputDTO>();
+
+            foreach (var c in customers)
+            {
+                customerOutputDTOs.Add(_mapper.Map<CustomerOutputDTO>(c));
+            }
+
+            return customerOutputDTOs;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 }

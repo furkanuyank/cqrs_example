@@ -1,21 +1,36 @@
-﻿using cqrs_example.Cqrs;
+﻿using AutoMapper;
+using cqrs_example.Cqrs;
+using cqrs_example.Domain.DTO;
+using cqrs_example.Domain.OutputDTO;
 using cqrs_example.Entity;
 using MediatR;
 
 namespace cqrs_example.Handlers;
 
-public class AddCustomerCommandHandler : IRequestHandler<AddCustomerCommand, Customer>
+public class AddCustomerCommandHandler : IRequestHandler<AddCustomerCommand, CustomerOutputDTO>
 {
-    private readonly FakeDB.FakeDB _fakeDB;
+    private readonly AppDbContext _dbContext;
+    private readonly IMapper _mapper;
 
-    public AddCustomerCommandHandler(FakeDB.FakeDB fakeDB)
+    public AddCustomerCommandHandler(AppDbContext dbContext, IMapper mapper)
     {
-        _fakeDB = fakeDB;
+        _dbContext = dbContext;
+        _mapper = mapper;
     }
 
-    public async Task<Customer> Handle(AddCustomerCommand request, CancellationToken cancellationToken)
+    public async Task<CustomerOutputDTO> Handle(AddCustomerCommand request, CancellationToken cancellationToken)
     {
-        await _fakeDB.AddCustomerAsync(request.customer);
-        return request.customer;
+        try
+        {
+            var customer = _mapper.Map<Customer>(request.CustomerInputDto);
+            await _dbContext.Customers.AddAsync(customer, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            var outputCustomer = _mapper.Map<CustomerOutputDTO>(customer);
+            return outputCustomer;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 }
