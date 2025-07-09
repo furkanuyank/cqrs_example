@@ -22,7 +22,7 @@ public class UpdateCustomerCommandHandler : IRequestHandler<UpdateCustomerComman
     {
         try
         {
-            //TODO: implement update
+            //implement update
             return null;
         }
         catch (Exception e)
